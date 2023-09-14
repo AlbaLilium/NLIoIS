@@ -1,2 +1,2 @@
-# NLiiS
-NLiiS 7th semester
+# NLIoIS
+NLIoIS 7th semester

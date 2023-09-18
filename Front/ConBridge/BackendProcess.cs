@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Diagnostics;
-
+using System.Linq;
+using System.Collections.Generic;
 
 namespace AlbaLilium.Nliois.ConBridge;
 
@@ -9,7 +11,7 @@ namespace AlbaLilium.Nliois.ConBridge;
 /// A class that repersent a child process that can communicate.
 /// Internally holds and uses a <see cref="ConsoleTransceiver"/>.
 /// </summary>
-public class CompanionProcess : IDisposable {
+public class BackendProcess : IDisposable {
 
 	#region //// Disposable
 
@@ -35,7 +37,7 @@ public class CompanionProcess : IDisposable {
 		isDisposed = true;
 	}
 
-	~CompanionProcess() {
+	~BackendProcess() {
 		Dispose(false);
 	}
 
@@ -47,23 +49,33 @@ public class CompanionProcess : IDisposable {
 	#endregion
 
 	protected Process ChildProcess;
-	protected ConsoleTransceiver Transceiver;
+	public ConsoleTransceiver Transceiver { get; private set; }
 
-	/// <inheritdoc cref="CompanionProcess"/>
-	public CompanionProcess(string childProcessFilename) {
+	/// <inheritdoc cref="BackendProcess"/>
+	public BackendProcess() {
+
+		const string relativePathToBack = "../../../../../Back";
+		const string startingScript = "main.py";
+		const string executingCommandFormat = "python";
+
+		string pathToBackend = Path.Combine(Directory.GetCurrentDirectory(), relativePathToBack);
+		string pathToScript = Path.Combine(pathToBackend, startingScript);
 
 		// Set-up process
 		ProcessStartInfo info = new() {
-			FileName = childProcessFilename,
+			FileName = executingCommandFormat,
 			RedirectStandardInput = true,
 			RedirectStandardOutput = true,
-			UseShellExecute = false
+			RedirectStandardError = true,
+			UseShellExecute = false,
+			WorkingDirectory = pathToBackend
 		};
+		info.ArgumentList.Add(pathToScript);
 
-		ChildProcess = Process.Start(info) ?? throw new ArgumentException($"Cannot start process {childProcessFilename}", nameof(childProcessFilename));
-
+		ChildProcess = Process.Start(info) ?? throw new ArgumentException($"Cannot start backend process");
+		
 		// Set-up transiver
-		Transceiver = new ConsoleTransceiver(ChildProcess.StandardOutput, ChildProcess.StandardInput);
+		Transceiver = new ConsoleTransceiver(ChildProcess);
 
 	}
 

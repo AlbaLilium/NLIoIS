@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Diagnostics;
 
 
 namespace AlbaLilium.Nliois.ConBridge;
@@ -15,9 +16,10 @@ namespace AlbaLilium.Nliois.ConBridge;
 /// Not recommended for serious projects:
 /// - There is a parent/child relation ship.
 /// - It uses stdin, stdout.
-/// We just can't be bothered with pipes and stuff.
 /// </summary>
 public class ConsoleTransceiver {
+
+	readonly Process process;
 
 	/// <inheritdoc cref="ConsoleTransceiver"/>
 	/// <remarks>

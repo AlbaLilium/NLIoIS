@@ -19,15 +19,17 @@ namespace AlbaLilium.Nliois.ConBridge;
 /// </summary>
 public class ConsoleTransceiver {
 
-	readonly Process process;
+	readonly StreamReader stdout;
+	readonly StreamWriter stdin;
 
 	/// <inheritdoc cref="ConsoleTransceiver"/>
 	/// <remarks>
 	/// Only takes a reference to the streams.
 	/// Does not take ownership/disposes of them.
 	/// </remarks>
-	public ConsoleTransceiver(StreamReader stdout, StreamWriter stdin) { 
-		//todo
+	public ConsoleTransceiver(StreamReader stdout, StreamWriter stdin) {
+		this.stdin = stdin;
+		this.stdout = stdout;
 	}
 
 }

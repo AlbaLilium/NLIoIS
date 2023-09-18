@@ -1,8 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Diagnostics;
-using System.Linq;
-using System.Collections.Generic;
+
 
 namespace AlbaLilium.Nliois.ConBridge;
 
@@ -54,16 +53,16 @@ public class BackendProcess : IDisposable {
 	/// <inheritdoc cref="BackendProcess"/>
 	public BackendProcess() {
 
-		const string relativePathToBack = "../../../../../Back";
+		const string relativePathToBack = @"..\..\..\..\..\Back";
 		const string startingScript = "main.py";
-		const string executingCommandFormat = "python";
+		const string executingCommand = "python";
 
 		string pathToBackend = Path.Combine(Directory.GetCurrentDirectory(), relativePathToBack);
 		string pathToScript = Path.Combine(pathToBackend, startingScript);
 
 		// Set-up process
 		ProcessStartInfo info = new() {
-			FileName = executingCommandFormat,
+			FileName = executingCommand,
 			RedirectStandardInput = true,
 			RedirectStandardOutput = true,
 			RedirectStandardError = true,
@@ -72,10 +71,10 @@ public class BackendProcess : IDisposable {
 		};
 		info.ArgumentList.Add(pathToScript);
 
-		ChildProcess = Process.Start(info) ?? throw new ArgumentException($"Cannot start backend process");
+		ChildProcess = Process.Start(info) ?? throw new BackendProcessException("Cannot start backend process");
 		
 		// Set-up transiver
-		Transceiver = new ConsoleTransceiver(ChildProcess);
+		Transceiver = new ConsoleTransceiver(ChildProcess.StandardOutput, ChildProcess.StandardInput);
 
 	}
 

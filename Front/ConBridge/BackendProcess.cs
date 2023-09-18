@@ -7,7 +7,7 @@ namespace AlbaLilium.Nliois.ConBridge;
 
 
 /// <summary>
-/// A class that repersent a child process that can communicate.
+/// A class that represents a child process that can communicate.
 /// Internally holds and uses a <see cref="ConsoleTransceiver"/>.
 /// </summary>
 public class BackendProcess : IDisposable {
@@ -69,10 +69,27 @@ public class BackendProcess : IDisposable {
 		info.ArgumentList.Add(startingScript);
 
 		ChildProcess = Process.Start(info) ?? throw new BackendProcessException("Cannot start backend process");
-		
-		// Set-up transiver
+
+		// Set-up error forwarding
+		ChildProcess.EnableRaisingEvents = true;
+		ChildProcess.ErrorDataReceived += OnChildProcessError;
+		ChildProcess.Exited += OnChildProcessExit;
+
+		// Set-up transceiver
 		Transceiver = new ConsoleTransceiver(ChildProcess.StandardOutput, ChildProcess.StandardInput);
 
+	}
+
+	void OnChildProcessError(object? _sender, DataReceivedEventArgs error) {
+		throw new BackendProcessException(error.Data ?? "Unknown error");
+	}
+
+	void OnChildProcessExit(object? _sender, EventArgs _e) {
+		if (ChildProcess.ExitCode != 0) {
+			string message = $"Backend process exited with non-zero code {ChildProcess.ExitCode}.\n";
+			message += $"Stderr:\n{ChildProcess.StandardError.ReadToEnd()}";
+			throw new BackendProcessException(message);
+		}
 	}
 
 }

@@ -10,12 +10,13 @@ namespace AlbaLilium.Nliois.ConBridge;
 
 /// <summary>
 /// (parent process transceiver)
-/// Uses stdin and stdout of a child proess for
+/// Uses stdin and stdout of a child process for
 /// inter-process communication in a standardized manner.
 /// 
-/// Not recommended for serious projects:
+/// Be cautious of this for serious projects:
 /// - There is a parent/child relation ship.
 /// - It uses stdin, stdout.
+/// Consider other approaches.
 /// </summary>
 public class ConsoleTransceiver {
 

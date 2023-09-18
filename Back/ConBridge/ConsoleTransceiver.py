@@ -5,7 +5,7 @@ class ConsoleTransceiver:
 	(child process transceiver)
 	Takes over stdin and stdout to reply to requests in a standardized manner.
 	A way to achieve inter-process communication, with this being in a child process.
-	This method is very hacky. NOT recommended for serious projects.
+	This method is very hacky. Be cautious for serious projects and consider other approaches.
 	"""
 
 	def __init__(self):

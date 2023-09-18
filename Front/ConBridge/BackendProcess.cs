@@ -53,23 +53,20 @@ public class BackendProcess : IDisposable {
 	/// <inheritdoc cref="BackendProcess"/>
 	public BackendProcess() {
 
-		const string relativePathToBack = @"..\..\..\..\..\Back";
+		const string pathToBack = @"..\..\..\..\..\Back";
 		const string startingScript = "main.py";
 		const string executingCommand = "python";
-
-		string pathToBackend = Path.Combine(Directory.GetCurrentDirectory(), relativePathToBack);
-		string pathToScript = Path.Combine(pathToBackend, startingScript);
 
 		// Set-up process
 		ProcessStartInfo info = new() {
 			FileName = executingCommand,
+			WorkingDirectory = pathToBack,
 			RedirectStandardInput = true,
 			RedirectStandardOutput = true,
 			RedirectStandardError = true,
-			UseShellExecute = false,
-			WorkingDirectory = pathToBackend
+			UseShellExecute = false
 		};
-		info.ArgumentList.Add(pathToScript);
+		info.ArgumentList.Add(startingScript);
 
 		ChildProcess = Process.Start(info) ?? throw new BackendProcessException("Cannot start backend process");
 		

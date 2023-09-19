@@ -32,5 +32,24 @@ public class ConsoleTransceiver {
 		this.stdin = stdin;
 		this.stdout = stdout;
 	}
+	
+	/// <summary>
+	/// Sends a raw string and returns a raw response string.
+	/// Raw query may not contain new lines.
+	/// </summary>
+	private string RequestRaw(string query) {
+
+		if (query.Contains('\n') || query.Contains('\r')) {
+			throw new ArgumentException("Raw query may not contain new lines", nameof(query));
+		}
+
+		// Write query
+		stdin.WriteLine(query);
+
+		// Read response
+		string response = stdout.ReadLine() ?? "";
+		
+		return response;
+	}
 
 }

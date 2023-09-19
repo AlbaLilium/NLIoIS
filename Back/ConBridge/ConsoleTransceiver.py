@@ -28,3 +28,8 @@ class ConsoleTransceiver:
 		#TODO
 		pass
 	
+	def _transmit_raw(self, response: str):
+		"""Transmits a raw string. May not contain new lines."""
+		if "\n" in response or "\r" in response:
+			raise ValueError("Raw response string may not contain new lines")
+		print(response, flush=True)

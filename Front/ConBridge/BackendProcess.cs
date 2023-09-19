@@ -64,7 +64,8 @@ public class BackendProcess : IDisposable {
 			RedirectStandardInput = true,
 			RedirectStandardOutput = true,
 			RedirectStandardError = true,
-			UseShellExecute = false
+			UseShellExecute = false,
+			CreateNoWindow = true
 		};
 		info.ArgumentList.Add(startingScript);
 

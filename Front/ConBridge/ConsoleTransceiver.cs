@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using System.Diagnostics;
+using System.Text;
 
 
 namespace AlbaLilium.Nliois.ConBridge;
@@ -32,7 +32,7 @@ public class ConsoleTransceiver {
 		this.stdin = stdin;
 		this.stdout = stdout;
 	}
-	
+
 	/// <summary>
 	/// Sends a raw string and returns a raw response string.
 	/// Raw query may not contain new lines.
@@ -50,6 +50,39 @@ public class ConsoleTransceiver {
 		string response = stdout.ReadLine() ?? "";
 		
 		return response;
+	}
+
+	/// <summary>
+	/// Performs a request by key.
+	/// Parameter types are inferred from dynamic typing.
+	/// </summary>
+	public QueryResult<TResult> Request<TResult>(string key, params dynamic?[] args) {
+
+		StringBuilder query = new StringBuilder();
+
+		// Format key
+		//todo
+
+		// Format params
+		foreach (dynamic? arg in args) {
+
+			if (arg is null) {
+				//todo
+				continue;
+			}
+
+			Type argType = arg.GetType();
+			//todo
+
+		}
+
+		// Perform query
+		string response = RequestRaw(query.ToString());
+
+		// Parse response
+		//todo
+
+		throw new NotImplementedException();
 	}
 
 }

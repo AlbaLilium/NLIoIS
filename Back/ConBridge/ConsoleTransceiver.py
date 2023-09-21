@@ -19,13 +19,23 @@ class ConsoleTransceiver:
 		while True:
 			received = input()
 			if received == "exit":
-				#TODO: Put command into some sort of enum
 				break
 			else:
 				self._handle_received(received)
 
 	def _handle_received(self, received: str):
-		#TODO
+		
+		# Parse received
+		#todo
+
+		# Find method
+		#todo
+
+		# Call method
+		#todo
+
+		# Format response
+		#todo
 		pass
 	
 	def _transmit_raw(self, response: str):
